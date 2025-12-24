@@ -3,7 +3,6 @@ package converter
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -35,6 +34,12 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	contentType := header.Header.Get("Content-Type")
+	if contentType != "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && contentType != "application/msword" {
+		server.Errorf(w, http.StatusBadRequest, "invalid content type: %s", contentType)
+		return
+	}
+
 	// Save uploaded file
 	uploadPath := filepath.Join(uploadsPath, uuid.New().String()+ext)
 	dst, err := os.Create(uploadPath)
@@ -53,13 +58,14 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 	// Convert DOCX to PDF
 	outputPath, err := docxToPDF(uploadPath)
 	if err != nil {
-		log.Printf("Conversion error: %v", err)
 		server.Errorf(w, http.StatusInternalServerError, "conversion error: %w", err)
 		return
 	}
 
 	// Serve the converted file
-	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filepath.Base(outputPath)))
+	filenameWithoutExt := strings.TrimSuffix(header.Filename, filepath.Ext(header.Filename))
+	pdfFilename := filenameWithoutExt + ".pdf"
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", pdfFilename))
 	w.Header().Set("Content-Type", "application/pdf")
 
 	outputFile, err := os.Open(outputPath)
