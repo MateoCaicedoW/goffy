@@ -25,26 +25,26 @@ A modern web application built with Go for document conversion and processing, f
 - LibreOffice (for document processing)
 - Tailwind CSS (binary)
 
-## Tailwind CSS Installation
+#### Tailwind CSS Installation
 ```bash
 go tool tailo download -v v4.0.6 
 ```
 
-## LibreOffice Installation
-# Ubuntu/Debian
+#### LibreOffice Installation
+#### Ubuntu/Debian
 ```bash
 sudo apt-get install libreoffice
 ```
 
-# macOS
+#### macOS
 ```bash
 brew install --cask libreoffice
 ```
 
-# Windows
+#### Windows
 Download from https://www.libreoffice.org/download/
 
-### Installation
+### Dependencies Installation
 
 ```bash
 go mod download
