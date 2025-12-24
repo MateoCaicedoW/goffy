@@ -16,8 +16,6 @@ ADD . .
 # Generating the Tailwind CSS styles with the tailwind binary previously downloaded.
 RUN go tool tailo --i internal/system/assets/tailwind.css -o internal/system/assets/application.css
 
-# Building the migrate command with necessary tags
-RUN go build -tags osusergo,netgo -o bin/migrate ./cmd/migrate
 
 # Building the app with necessary tags
 RUN go build -tags osusergo,netgo -o bin/app ./cmd/app
@@ -29,7 +27,6 @@ WORKDIR /bin/
 
 # Copying binaries to /bin from the builder stage
 COPY --from=builder /src/app/bin/app .
-COPY --from=builder /src/app/bin/migrate .
 
 # Specifying the shell to use
 SHELL ["/bin/ash", "-c"]

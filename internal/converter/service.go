@@ -14,12 +14,11 @@ const (
 	maxUploadSize = 50 << 20 // 50 MB
 	uploadsPath   = "./uploads"
 	outputsPath   = "./outputs"
-	tempPath      = "./temp"
 )
 
 func init() {
 	// Create necessary directories
-	dirs := []string{uploadsPath, outputsPath, tempPath}
+	dirs := []string{uploadsPath, outputsPath}
 	for _, dir := range dirs {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			panic(fmt.Sprintf("failed to create directory %s: %v", dir, err))
