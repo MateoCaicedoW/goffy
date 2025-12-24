@@ -16,12 +16,21 @@ ADD . .
 # Generating the Tailwind CSS styles with the tailwind binary previously downloaded.
 RUN go tool tailo --i internal/system/assets/tailwind.css -o internal/system/assets/application.css
 
+# Building the app with necessary tags - FORCE STATIC COMPILATION
+RUN CGO_ENABLED=0 go build -tags osusergo,netgo -ldflags="-s -w" -o bin/app ./cmd/app
 
-# Building the app with necessary tags
-RUN go build -tags osusergo,netgo -o bin/app ./cmd/app
+# Use Debian instead of Alpine for LibreOffice compatibility
+FROM debian:bookworm-slim
 
-FROM alpine
-RUN apk add --no-cache tzdata ca-certificates libreoffice
+# Install LibreOffice with Thai font support
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libreoffice \
+    fonts-thai-tlwg \
+    fonts-noto \
+    ca-certificates \
+    tzdata \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /bin/
 
@@ -29,5 +38,5 @@ WORKDIR /bin/
 COPY --from=builder /src/app/bin/app .
 
 # Specifying the shell to use
-SHELL ["/bin/ash", "-c"]
-CMD  app
+SHELL ["/bin/bash", "-c"]
+CMD ["./app"]
