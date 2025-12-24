@@ -30,4 +30,4 @@ COPY --from=builder /src/app/bin/app .
 
 # Specifying the shell to use
 SHELL ["/bin/ash", "-c"]
-CMD migrate && app
+CMD  app
