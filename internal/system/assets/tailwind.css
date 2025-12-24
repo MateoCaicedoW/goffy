@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* Plugins */
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+
+
+.loading-indicator {
+    @apply hidden;
+}
+.htmx-request .loading-indicator,
+.htmx-request.loading-indicator {
+    @apply inline-block;
+}

@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "application": "application.js",
+    "stimulus": "stimulus@3.2.2.js",
+    "converter": "converter.js"
+  }
+}
