@@ -7,3 +7,4 @@ internal/system/assets/application.css
 uploads/
 temp/
 outputs/
+.DS_Store

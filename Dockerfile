@@ -16,9 +16,12 @@ RUN CGO_ENABLED=0 go build -tags osusergo,netgo -ldflags="-s -w" -o bin/app ./cm
 
 FROM debian:bookworm-slim
 
-# Install LibreOffice with COMPREHENSIVE font support
+# Install LibreOffice, Python, and pdf2docx with comprehensive font support
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice \
+    python3 \
+    python3-pip \
+    python3-venv \
     fonts-thai-tlwg \
     fonts-noto \
     fonts-noto-cjk \
@@ -32,6 +35,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tzdata \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# Install pdf2docx globally (no virtual environment needed in container)
+RUN pip3 install --no-cache-dir pdf2docx --break-system-packages
 
 WORKDIR /bin/
 

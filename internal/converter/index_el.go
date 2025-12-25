@@ -12,17 +12,6 @@ func indexEl() Node {
 	return Div(
 		Data("controller", "converter"),
 		Class("container mx-auto px-4 py-8 max-w-4xl"),
-		// Header
-		Div(
-			Class("text-center mb-8"),
-			H1(
-				Class("text-4xl font-bold mb-2"),
-				Text("GoFFY - DOCX to PDF Converter"),
-			),
-			P(
-				Text("Easily convert your DOCX files to PDF format"),
-			),
-		),
 
 		// Main Card
 		gomui.Card(
@@ -32,28 +21,29 @@ func indexEl() Node {
 			),
 
 			gomui.CardContent(
-				// // Conversion Direction Selector
-				// Div(
-				// 	Class("mb-8"),
-				// 	gomui.Tabs(
-				// 		gomui.TabsList(
-				// 			gomui.TabItem("pdf-to-docx",
-				// 				true,
-				// 				Text("PDF → DOCX"),
-				// 				Data("type", "pdf-to-docx"),
-				// 				Data("converter-target", "pdfToDocxBtn"),
-				// 				Data("action", "click->converter#selectConversion"),
-				// 			),
-				// 			gomui.TabItem("pdf-to-docx",
-				// 				false,
-				// 				Text("DOCX → PDF"),
-				// 				Data("type", "docx-to-pdf"),
-				// 				Data("converter-target", "docxToPdfBtn"),
-				// 				Data("action", "click->converter#selectConversion"),
-				// 			),
-				// 		),
-				// 	),
-				// ),
+				// Conversion Direction Selector
+				Div(
+					Class("mb-8"),
+					gomui.Tabs(
+						Input(Type("hidden"), Name("conversionType"), Value("docx-to-pdf"), Data("converter-target", "conversionTypeInput")),
+						gomui.TabsList(
+							gomui.TabItem("pdf-to-docx",
+								true,
+								Text("PDF → DOCX"),
+								Data("type", "pdf-to-docx"),
+								Data("converter-target", "pdfToDocxBtn"),
+								Data("action", "click->converter#selectConversion"),
+							),
+							gomui.TabItem("pdf-to-docx",
+								false,
+								Text("DOCX → PDF"),
+								Data("type", "docx-to-pdf"),
+								Data("converter-target", "docxToPdfBtn"),
+								Data("action", "click->converter#selectConversion"),
+							),
+						),
+					),
+				),
 				// Upload Area
 				Div(
 					Input(
@@ -83,8 +73,9 @@ func indexEl() Node {
 							Class("text-xs  mt-4"),
 							Text("Supported formats:"),
 							Span(
+								Data("converter-target", "supportedFormat"),
 								Class("font-medium"),
-								Text("DOCX"),
+								Text("PDF"),
 							),
 						),
 					),
@@ -134,7 +125,7 @@ func indexEl() Node {
 					false,
 					Text("Convert File"),
 					hx.Post("/convert"),
-					hx.Include("[name='file']"),
+					hx.Include("[name='file'], [name='conversionType']"),
 					hx.Encoding("multipart/form-data"),
 					hx.Ext("htmx-download"),
 					hx.DisabledElt("this"),

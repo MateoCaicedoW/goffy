@@ -53,6 +53,33 @@ func docxToPDF(inputPath string) (string, error) {
 	return outputPath, nil
 }
 
+func pdfToDocx(inputPath string) (string, error) {
+	outputFilename := strings.TrimSuffix(filepath.Base(inputPath), filepath.Ext(inputPath)) + ".docx"
+	outputPath := filepath.Join(outputsPath, outputFilename)
+
+	// Get absolute paths
+	absInput, err := filepath.Abs(inputPath)
+	if err != nil {
+		return "", fmt.Errorf("failed to get absolute path for input: %w", err)
+	}
+
+	absOutput, err := filepath.Abs(outputPath)
+	if err != nil {
+		return "", fmt.Errorf("failed to get absolute path for output: %w", err)
+	}
+
+	// Run pdf2docx conversion
+	cmd := exec.Command("pdf2docx", "convert", absInput, absOutput)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		return "", fmt.Errorf("conversion command failed: %w", err)
+	}
+
+	return outputPath, nil
+}
+
 // cleanupFiles removes temporary files after a delay
 func cleanupFiles(paths ...string) {
 	time.Sleep(5 * time.Second)

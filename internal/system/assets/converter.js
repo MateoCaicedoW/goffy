@@ -1,13 +1,29 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-    static targets = ['fileInput', 'dropzone', 'filePreview', 'fileName', 'fileSize', 'pdfToDocxBtn', 'docxToPdfBtn'];
+    static targets = ['fileInput', 'supportedFormat', 'dropzone', 'filePreview', 'fileName', 'fileSize', 'pdfToDocxBtn', 'docxToPdfBtn', "conversionTypeInput"];
     static values = { type: { type: String, default: 'pdf-to-docx' } };
+
+    connect() {
+        this.updateAcceptedFormats();
+    }
 
     selectConversion(event) {
         this.typeValue = event.currentTarget.dataset.type;
         this.updateAcceptedFormats();
         this.clearFile();
+    }
+
+    updateAcceptedFormats() {
+        if (this.typeValue === 'pdf-to-docx') {
+            this.fileInputTarget.accept = '.pdf,application/pdf';
+            this.supportedFormatTarget.textContent = 'PDF';
+            this.conversionTypeInputTarget.value = 'pdf-to-docx';
+        } else {
+            this.fileInputTarget.accept = '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            this.supportedFormatTarget.textContent = 'DOCX';
+            this.conversionTypeInputTarget.value = 'docx-to-pdf';
+        }
     }
 
     triggerFileInput() {

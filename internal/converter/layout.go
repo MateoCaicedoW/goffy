@@ -41,10 +41,29 @@ func (props layout) New() Node {
 
 				Div(
 					Class("min-h-screen flex flex-col bg-base-100 text-base-content"),
+					Header(
+						Class("flex items-center justify-between p-4"),
+						H1(
+							Class("text-2xl font-bold"),
+							Text("GoFFY"),
+						),
+
+						Div(
+							Class("flex items-center gap-2"),
+							gomui.LinkButtonEl(
+								gomui.ButtonOutline,
+								gomui.ButtonDefault,
+								true,
+								"https://github.com/MateoCaicedoW/goffy",
+								lucide.Github(Class("size-5")),
+								Target("_blank"),
+							),
+							gomui.ThemeToggle("theme-toggle", lucide.Sun(Class("size-5"))),
+						),
+					),
 					props.Yield,
 				),
 
-				gomui.ThemeToggle("theme-toggle", lucide.Sun(Class("size-5")), Class("btn-icon-outline size-8 absolute top-5 right-5")),
 				gomui.DarkModeScript(),
 			},
 		},
